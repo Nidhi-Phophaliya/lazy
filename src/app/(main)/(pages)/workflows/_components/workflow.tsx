@@ -1,9 +1,13 @@
+'use client';
+
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { onFlowPublish } from "../_actions/workflow-connections";
+import { toast } from "sonner";
 
 type Props = {
     name: string
@@ -13,6 +17,10 @@ type Props = {
 };
 
 const Workflow = ({ description, id, name, publish }: Props) => {
+  const onPublishFlow = async (event:any) => {
+    const response = await onFlowPublish(id, event.target.checked == 'false' ) 
+    if(response) toast.message(response)
+  }
     return (
         <Card className="flex w-full items-center justify-between">
           <CardHeader className="flex flex-col gap-4">
@@ -55,7 +63,7 @@ const Workflow = ({ description, id, name, publish }: Props) => {
             </Label>
             <Switch
               id="airplane-mode"
-              // onClick={onPublishFlow}
+              onClick={onPublishFlow}
               defaultChecked={publish!}
             />
           </div>
